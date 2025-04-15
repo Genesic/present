@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LDAP 配置</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        fieldset {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            padding: 15px;
+        }
+        legend {
+            font-weight: bold;
+            color: #555;
+            padding: 0 5px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #444;
+        }
+        input[type="text"],
+        input[type="url"],
+        input[type="password"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box; /* Prevents padding from adding to width */
+        }
+        textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        .checkbox-group label {
+            display: inline-block;
+            margin-right: 15px;
+            font-weight: normal;
+        }
+         .checkbox-group input[type="checkbox"] {
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+        .button-group {
+            text-align: right;
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-left: 10px;
+        }
+        button[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+        }
+        button[type="button"] {
+            background-color: #f44336;
+            color: white;
+        }
+         button:hover {
+            opacity: 0.9;
+         }
+         small {
+            display: block;
+            margin-top: -10px;
+            margin-bottom: 15px;
+            color: #777;
+         }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>LDAP 配置</h1>
+    <form id="ldapConfigForm">
+
+        <fieldset>
+            <legend>基本資訊</legend>
+
+            <label for="enable">啟用:</label>
+            <div class="checkbox-group">
+                 <input type="checkbox" id="enable" name="enable" value="true">
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>伺服器資訊</legend>
+            <label for="serverProtocol">Server URI:</label>
+            <div style="display: flex; align-items: baseline; margin-bottom: 15px;">
+                <select id="serverProtocol" name="serverProtocol" style="width: auto; margin-right: 5px;">
+                    <option value="ldap://">ldap://</option>
+                    <option value="ldaps://">ldaps://</option>
+                </select>
+                <input type="text" id="serverAddress" name="serverAddress" placeholder="ldap.example.com:389" style="flex-grow: 1; margin-bottom: 0;">
+            </div>
+
+            <label for="baseDN">Base DN:</label>
+            <input type="text" id="baseDN" name="baseDN" placeholder="dc=example,dc=com">
+
+            <label for="userBaseDN">User Base DN:</label>
+            <input type="text" id="userBaseDN" name="userBaseDN" placeholder="ou=users,dc=example,dc=com">
+
+            <label for="bindDN">Bind DN:</label>
+            <input type="text" id="bindDN" name="bindDN" placeholder="cn=admin,dc=example,dc=com">
+
+            <label for="bindPassword">Bind Password:</label>
+            <input type="password" id="bindPassword" name="bindPassword">
+
+            <label for="timeout">Timeout (秒):</label>
+            <input type="number" id="timeout" name="timeout" value="5" min="1">
+        </fieldset>
+
+        <fieldset>
+            <legend>TLS 設定</legend>
+            <div class="checkbox-group">
+                <label for="insecureTLS">
+                    <input type="checkbox" id="insecureTLS" name="insecureTLS" value="true"> Insecure TLS (跳過驗證)
+                </label>
+            </div>
+            <div class="checkbox-group">
+                 <label for="startTLS">
+                    <input type="checkbox" id="startTLS" name="startTLS" value="true"> 使用 StartTLS
+                 </label>
+            </div>
+             <label for="tlsVersion">TLS Version:</label>
+             <select id="tlsVersion" name="tlsVersion">
+                 <option value="">預設</option>
+                 <option value="1.0">TLS 1.0</option>
+                 <option value="1.1">TLS 1.1</option>
+                 <option value="1.2">TLS 1.2</option>
+                 <option value="1.3">TLS 1.3</option>
+             </select>
+        </fieldset>
+
+        <fieldset>
+            <legend>搜索行為</legend>
+            <label for="scope">Scope:</label>
+            <select id="scope" name="scope">
+                <option value="subtree" selected>Subtree</option>
+                <option value="onelevel">One Level</option>
+                <option value="base">Base</option>
+            </select>
+
+            <label for="userFilter">User Filter:</label>
+            <input type="text" id="userFilter" name="userFilter" placeholder="(objectClass=inetOrgPerson)">
+        </fieldset>
+
+        <fieldset>
+            <legend>屬性映射</legend>
+            <label for="uidAttribute">UID Attribute:</label>
+            <input type="text" id="uidAttribute" name="uidAttribute" placeholder="uid">
+
+            <label for="attributeMappingAccount">Account Attribute:</label>
+            <input type="text" id="attributeMappingAccount" name="attributeMappingAccount" placeholder="uid">
+
+            <label for="attributeMappingName">Name Attribute:</label>
+            <input type="text" id="attributeMappingName" name="attributeMappingName" placeholder="cn">
+
+            <label for="attributeMappingEmail">Email Attribute:</label>
+            <input type="text" id="attributeMappingEmail" name="attributeMappingEmail" placeholder="mail">
+
+            <label for="multiValueAttrs">Multi-Value Attributes:</label>
+            <input type="text" id="multiValueAttrs" name="multiValueAttrs" placeholder="memberOf, groupMembership">
+            <small>多個屬性請用逗號分隔</small>
+
+            <label for="defaultRoles">Default Roles:</label>
+            <input type="text" id="defaultRoles" name="defaultRoles" placeholder="admin,editor,viewer">
+            <small>多個角色請用逗號分隔</small>
+        </fieldset>
+
+        <div class="button-group">
+            <button type="submit">確定</button>
+            <button type="button" onclick="window.history.back();">取消</button> <!-- 或者其他取消操作 -->
+        </div>
+    </form>
+</div>
+
+<script>
+    // 你可以在這裡添加 JavaScript 來處理表單提交，例如將數據發送到後端
+    // const form = document.getElementById('ldapConfigForm');
+    // form.addEventListener('submit', (event) => {
+    //     event.preventDefault(); // 阻止表單默認提交行為
+    //     const formData = new FormData(form);
+    //     const data = Object.fromEntries(formData.entries());
+    //
+    //     // 將 checkbox 的值轉換為 boolean
+    //     data.enable = formData.has('enable');
+    //     data.insecureTLS = formData.has('insecureTLS');
+    //     data.startTLS = formData.has('startTLS');
+    //
+    //     // 將數字字串轉為數字
+    //     data.timeout = parseInt(data.timeout, 10);
+    //
+    //     // 處理陣列型態的字串
+    //     data.multiValueAttrs = data.multiValueAttrs.split(',').map(s => s.trim()).filter(Boolean);
+    //     data.defaultRoles = data.defaultRoles.split(',').map(s => s.trim()).filter(Boolean);
+    //
+    //     console.log("表單數據:", data);
+    //     // 在這裡添加將數據發送到後端的代碼
+    //     // fetch('/api/ldap/config', { method: 'POST', body: JSON.stringify(data), headers: {'Content-Type': 'application/json'} })
+    //     //  .then(...)
+    // });
+
+    // --- 新增處理 Server Protocol 和 StartTLS 的邏輯 ---
+    const serverProtocolSelect = document.getElementById('serverProtocol');
+    const serverAddressInput = document.getElementById('serverAddress'); // 用於可能的組合
+    const startTLSCheckbox = document.getElementById('startTLS');
+
+    function updateStartTLSState() {
+        if (serverProtocolSelect.value === 'ldaps://') {
+            startTLSCheckbox.checked = false;
+            startTLSCheckbox.disabled = true;
+        } else {
+            startTLSCheckbox.disabled = false;
+        }
+    }
+
+    // 監聽下拉選單的變更
+    serverProtocolSelect.addEventListener('change', updateStartTLSState);
+
+    // 頁面載入時執行一次，確保初始狀態正確
+    document.addEventListener('DOMContentLoaded', updateStartTLSState);
+    // --- 結束新增邏輯 ---
+</script>
+
+</body>
+</html>
