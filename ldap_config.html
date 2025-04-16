@@ -108,7 +108,7 @@
 
             <label for="enable">啟用:</label>
             <div class="checkbox-group">
-                 <input type="checkbox" id="enable" name="enable" value="true">
+                 <input type="checkbox" id="enable" name="enable" value="true" checked>
             </div>
         </fieldset>
 
@@ -120,17 +120,17 @@
                     <option value="ldap://">ldap://</option>
                     <option value="ldaps://">ldaps://</option>
                 </select>
-                <input type="text" id="serverAddress" name="serverAddress" placeholder="ldap.example.com:389" style="flex-grow: 1; margin-bottom: 0;">
+                <input type="text" id="serverAddress" name="serverAddress" placeholder="ex: ldap.example.com:389" style="flex-grow: 1; margin-bottom: 0;">
             </div>
 
             <label for="baseDN">Base DN:</label>
-            <input type="text" id="baseDN" name="baseDN" placeholder="dc=example,dc=com">
+            <input type="text" id="baseDN" name="baseDN" placeholder="ex: dc=example,dc=com">
 
             <label for="userBaseDN">User Base DN:</label>
-            <input type="text" id="userBaseDN" name="userBaseDN" placeholder="ou=users,dc=example,dc=com">
+            <input type="text" id="userBaseDN" name="userBaseDN" placeholder="ex: ou=users,dc=example,dc=com">
 
             <label for="bindDN">Bind DN:</label>
-            <input type="text" id="bindDN" name="bindDN" placeholder="cn=admin,dc=example,dc=com">
+            <input type="text" id="bindDN" name="bindDN" placeholder="ex: cn=admin,dc=example,dc=com">
 
             <label for="bindPassword">Bind Password:</label>
             <input type="password" id="bindPassword" name="bindPassword">
@@ -171,30 +171,30 @@
             </select>
 
             <label for="userFilter">User Filter:</label>
-            <input type="text" id="userFilter" name="userFilter" placeholder="(objectClass=inetOrgPerson)">
+            <input type="text" id="userFilter" name="userFilter" placeholder="ex: (objectClass=inetOrgPerson)">
         </fieldset>
 
         <fieldset>
             <legend>屬性映射</legend>
             <label for="uidAttribute">UID Attribute:</label>
-            <input type="text" id="uidAttribute" name="uidAttribute" placeholder="uid">
+            <input type="text" id="uidAttribute" name="uidAttribute" placeholder="ex: objectGUID">
 
             <label for="attributeMappingAccount">Account Attribute:</label>
-            <input type="text" id="attributeMappingAccount" name="attributeMappingAccount" placeholder="uid">
+            <input type="text" id="attributeMappingAccount" name="attributeMappingAccount" placeholder="ex: sAMAccountName">
 
             <label for="attributeMappingName">Name Attribute:</label>
-            <input type="text" id="attributeMappingName" name="attributeMappingName" placeholder="cn">
+            <input type="text" id="attributeMappingName" name="attributeMappingName" placeholder="ex: cn">
 
             <label for="attributeMappingEmail">Email Attribute:</label>
-            <input type="text" id="attributeMappingEmail" name="attributeMappingEmail" placeholder="mail">
+            <input type="text" id="attributeMappingEmail" name="attributeMappingEmail" placeholder="ex: mail">
 
             <label for="multiValueAttrs">Multi-Value Attributes:</label>
-            <input type="text" id="multiValueAttrs" name="multiValueAttrs" placeholder="memberOf, groupMembership">
+            <input type="text" id="multiValueAttrs" name="multiValueAttrs" placeholder="ex: memberOf, groupMembership">
             <small>多個屬性請用逗號分隔</small>
 
             <label for="defaultRoles">Default Roles:</label>
-            <input type="text" id="defaultRoles" name="defaultRoles" placeholder="admin,editor,viewer">
-            <small>多個角色請用逗號分隔</small>
+            <input type="text" id="defaultRoles" name="defaultRoles" placeholder="ex: admin,editor,viewer">
+            <small>[請將這邊改成fedgpt role select樣式]</small>
         </fieldset>
 
         <div class="button-group">
@@ -250,6 +250,33 @@
     // 頁面載入時執行一次，確保初始狀態正確
     document.addEventListener('DOMContentLoaded', updateStartTLSState);
     // --- 結束新增邏輯 ---
+
+    // --- 新增根據啟用狀態禁用/啟用表單欄位的邏輯 ---
+    const enableCheckbox = document.getElementById('enable');
+    const form = document.getElementById('ldapConfigForm');
+    // 選取所有需要被禁用的欄位 (除了啟用 checkbox 本身)
+    const fieldsToDisable = form.querySelectorAll('input:not(#enable), select, textarea, button[type="submit"]');
+
+    function updateFormFieldsState() {
+        const isDisabled = !enableCheckbox.checked;
+        fieldsToDisable.forEach(field => {
+            field.disabled = isDisabled;
+        });
+        // 如果是禁用狀態，也改變一下fieldset的視覺效果 (可選)
+        const fieldsets = form.querySelectorAll('fieldset:not(:first-of-type)'); // 跳過第一個包含啟用按鈕的 fieldset
+        fieldsets.forEach(fieldset => {
+            fieldset.style.opacity = isDisabled ? 0.5 : 1;
+            fieldset.style.pointerEvents = isDisabled ? 'none' : 'auto';
+        });
+    }
+
+    // 監聽啟用 checkbox 的變更
+    enableCheckbox.addEventListener('change', updateFormFieldsState);
+
+    // 頁面載入時執行一次，確保初始狀態正確
+    document.addEventListener('DOMContentLoaded', updateFormFieldsState);
+    // --- 結束新增邏輯 ---
+
 </script>
 
 </body>
