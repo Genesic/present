@@ -114,7 +114,7 @@
 
         <fieldset>
             <legend>伺服器資訊</legend>
-            <label for="serverProtocol">Server URI:</label>
+            <label for="serverProtocol">Server URI<span style="color:red;">*</span>:</label>
             <div style="display: flex; align-items: baseline; margin-bottom: 15px;">
                 <select id="serverProtocol" name="serverProtocol" style="width: auto; margin-right: 5px;">
                     <option value="ldap://">ldap://</option>
@@ -123,16 +123,16 @@
                 <input type="text" id="serverAddress" name="serverAddress" placeholder="ex: ldap.example.com:389" style="flex-grow: 1; margin-bottom: 0;">
             </div>
 
-            <label for="baseDN">Base DN:</label>
+            <label for="baseDN">Base DN<span style="color:red;">*</span>:</label>
             <input type="text" id="baseDN" name="baseDN" placeholder="ex: dc=example,dc=com">
 
             <label for="userBaseDN">User Base DN:</label>
             <input type="text" id="userBaseDN" name="userBaseDN" placeholder="ex: ou=users,dc=example,dc=com">
 
-            <label for="bindDN">Bind DN:</label>
+            <label for="bindDN">Bind DN<span style="color:red;">*</span>:</label>
             <input type="text" id="bindDN" name="bindDN" placeholder="ex: cn=admin,dc=example,dc=com">
 
-            <label for="bindPassword">Bind Password:</label>
+            <label for="bindPassword">Bind Password<span style="color:red;">*</span>:</label>
             <input type="password" id="bindPassword" name="bindPassword">
 
             <label for="timeout">Timeout (秒):</label>
@@ -163,23 +163,23 @@
 
         <fieldset>
             <legend>搜索行為</legend>
-            <label for="scope">Scope:</label>
+            <label for="scope">Scope<span style="color:red;">*</span>:</label>
             <select id="scope" name="scope">
                 <option value="subtree" selected>Subtree</option>
                 <option value="onelevel">One Level</option>
                 <option value="base">Base</option>
             </select>
 
-            <label for="userFilter">User Filter:</label>
+            <label for="userFilter">User Filter<span style="color:red;">*</span>:</label>
             <input type="text" id="userFilter" name="userFilter" placeholder="ex: (objectClass=inetOrgPerson)">
         </fieldset>
 
         <fieldset>
             <legend>屬性映射</legend>
-            <label for="uidAttribute">UID Attribute:</label>
+            <label for="uidAttribute">UID Attribute<span style="color:red;">*</span>:</label>
             <input type="text" id="uidAttribute" name="uidAttribute" placeholder="ex: objectGUID">
 
-            <label for="attributeMappingAccount">Account Attribute:</label>
+            <label for="attributeMappingAccount">Account Attribute<span style="color:red;">*</span>:</label>
             <input type="text" id="attributeMappingAccount" name="attributeMappingAccount" placeholder="ex: sAMAccountName">
 
             <label for="attributeMappingName">Name Attribute:</label>
@@ -192,7 +192,7 @@
             <input type="text" id="multiValueAttrs" name="multiValueAttrs" placeholder="ex: memberOf, groupMembership">
             <small>多個屬性請用逗號分隔</small>
 
-            <label for="defaultRoles">Default Roles:</label>
+            <label for="defaultRoles">Default Roles<span style="color:red;">*</span>:</label>
             <input type="text" id="defaultRoles" name="defaultRoles" placeholder="ex: admin,editor,viewer">
             <small>[請將這邊改成fedgpt role select樣式]</small>
         </fieldset>
